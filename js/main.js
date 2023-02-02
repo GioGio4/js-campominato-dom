@@ -32,7 +32,7 @@ let user_score = 0;
 // Creiamo un array (Bombs) che contiene al suo interno 16 numeri generati casualmente (mai ripetuti tra loro) da 1 a 100.
 const bombs_list = [];
 
-while (bombs_list.length < 10) {
+while (bombs_list.length < 16) {
 
     let random_number;
     random_number = Math.floor(Math.random() * 100) + 1;
@@ -45,6 +45,12 @@ while (bombs_list.length < 10) {
 }
 console.log(bombs_list);
 
+//SE Il giocatore clicca su tutte le caselle celesti(senza prendere le bombe), stampa hai vinto
+if ((user_score + bombs_list.length) == 20) {
+    alert("COMPLIMENTI HAI VINTO")
+}
+
+console.log((user_score + bombs_list.length));
 
 
 /************************************************
@@ -92,34 +98,32 @@ function create_grid(grid) {
         //Generiamo una sequenza di numeri da 1 a 100 che andranno inseriti dentro ogni Square (in HTML)
         square_el.append(i + 1);
 
-        // Quando l'utente clicca su ogni cella, la cella cliccata si colora di azzurro
 
         square_el.addEventListener(
             "click",
             function () {
-                // L'utente clicca su una cella (Il contatore user-score aumenta di 1)
-                user_score += 1;
-                console.log();
-
-                //Partirà un ciclo per analizzare tutti i numeri nell'array(bombs)
-                for (let i = 0; i < bombs_list.length; i++) {
-
-                    let bombs_number;
-                    bombs_number = bombs_list[i];
-
-                    // SE il numero è presente nell'array (bombs) la cella si colora di rosso (E il gioco si interrompe)
-                    if (parseInt(this.innerHTML) == bombs_number) {
-                        square_el.classList.add("bombs");
-                        alert("HAI PERSO " + "Hai cliccato su " + (parseInt(user_score) - 1) + " caselle senza bomba.");
-
+                // Quando l'utente clicca su ogni cella, se il numero NON è presente nella lista Bombe
+                //  la cella si colora di celeste 
+                if (!bombs_list.includes(parseInt(this.innerHTML))) {
+                    square_el.classList.add("active");
+                    // L'utente clicca su una cella celeste (Il contatore user-score aumenta di 1)
+                    user_score += 1;
+                    //SE l'utente clicca su tutte le celle celesti (senza prendere una bomba), stampa HAI VINTO
+                    if ((user_score + bombs_list.length) == 100) {
+                        alert("HAI VINTO")
                     }
+                    // ALTRIMENTI la cella si colora di ROSSO e il gioco si interrompe
+                } else {
+                    square_el.classList.add("bombs");
+                    alert("HAI PERSO " + "Hai cliccato su " + (parseInt(user_score)) + " caselle senza bomba.");
                 }
-                //ALTRIMENTI la cella si colora di celeste e il gioco prosegue                 
-                square_el.classList.add("active");
-
 
             }
         )
+
+
+
+
 
     }
 
