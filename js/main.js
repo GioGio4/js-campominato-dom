@@ -26,6 +26,24 @@
 ************************************************/
 
 const btn_play_game = document.getElementById("btn-play-game");
+//Variabile per controllare il punteggio del giocatore
+let user_score = 0;
+
+// Creiamo un array (Bombs) che contiene al suo interno 16 numeri generati casualmente (mai ripetuti tra loro) da 1 a 100.
+const bombs_list = [];
+
+while (bombs_list.length < 10) {
+
+    let random_number;
+    random_number = Math.floor(Math.random() * 100) + 1;
+
+    if (!bombs_list.includes(random_number)) {
+
+        bombs_list.push(random_number);
+    }
+
+}
+console.log(bombs_list);
 
 
 
@@ -79,11 +97,27 @@ function create_grid(grid) {
         square_el.addEventListener(
             "click",
             function () {
-                // Al verificarsi del click su uno square, la classe Active si aggiunge o si toglie (Toggle) dal DIV
-                square_el.classList.toggle("active");
+                // L'utente clicca su una cella (Il contatore user-score aumenta di 1)
+                user_score += 1;
+                console.log();
 
-                // ed emetto un messaggio in console con il numero della cella cliccata.
-                console.log(this.innerHTML);
+                //Partirà un ciclo per analizzare tutti i numeri nell'array(bombs)
+                for (let i = 0; i < bombs_list.length; i++) {
+
+                    let bombs_number;
+                    bombs_number = bombs_list[i];
+
+                    // SE il numero è presente nell'array (bombs) la cella si colora di rosso (E il gioco si interrompe)
+                    if (parseInt(this.innerHTML) == bombs_number) {
+                        square_el.classList.add("bombs");
+                        alert("HAI PERSO " + "Hai cliccato su " + (parseInt(user_score) - 1) + " caselle senza bomba.");
+
+                    }
+                }
+                //ALTRIMENTI la cella si colora di celeste e il gioco prosegue                 
+                square_el.classList.add("active");
+
+
             }
         )
 
