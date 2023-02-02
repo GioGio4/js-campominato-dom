@@ -29,6 +29,7 @@ const btn_play_game = document.getElementById("btn-play-game");
 //Variabile per controllare il punteggio del giocatore
 let user_score = 0;
 
+const game_over_el = document.getElementById("game-over");
 // Creiamo un array (Bombs) che contiene al suo interno 16 numeri generati casualmente (mai ripetuti tra loro) da 1 a 100.
 const bombs_list = [];
 
@@ -43,14 +44,6 @@ while (bombs_list.length < 16) {
     }
 
 }
-console.log(bombs_list);
-
-//SE Il giocatore clicca su tutte le caselle celesti(senza prendere le bombe), stampa hai vinto
-if ((user_score + bombs_list.length) == 20) {
-    alert("COMPLIMENTI HAI VINTO")
-}
-
-console.log((user_score + bombs_list.length));
 
 
 /************************************************
@@ -63,6 +56,8 @@ console.log((user_score + bombs_list.length));
 btn_play_game.addEventListener(
     "click",
     function () {
+        user_score = 0;
+        game_over_el.classList.remove("d-block");
         const grid_el = document.getElementById("grid");
         create_grid(grid_el);
     }
@@ -102,30 +97,31 @@ function create_grid(grid) {
         square_el.addEventListener(
             "click",
             function () {
-                // Quando l'utente clicca su ogni cella, se il numero NON è presente nella lista Bombe
+                // SE l'utente clicca su ogni cella, se il numero NON è presente nella lista Bombe
                 //  la cella si colora di celeste 
                 if (!bombs_list.includes(parseInt(this.innerHTML))) {
                     square_el.classList.add("active");
+
                     // L'utente clicca su una cella celeste (Il contatore user-score aumenta di 1)
                     user_score += 1;
+
                     //SE l'utente clicca su tutte le celle celesti (senza prendere una bomba), stampa HAI VINTO
                     if ((user_score + bombs_list.length) == 100) {
                         alert("HAI VINTO")
+
                     }
+
                     // ALTRIMENTI la cella si colora di ROSSO e il gioco si interrompe
                 } else {
+                    const user_score_el = document.getElementById("user-score");
                     square_el.classList.add("bombs");
-                    alert("HAI PERSO " + "Hai cliccato su " + (parseInt(user_score)) + " caselle senza bomba.");
+                    game_over_el.classList.add("d-block");
+                    user_score_el.innerHTML = (parseInt(user_score));
                 }
 
             }
         )
 
-
-
-
-
     }
-
 
 }
